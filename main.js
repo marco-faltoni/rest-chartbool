@@ -11,21 +11,11 @@ $.ajax({
     'method': 'GET',
     'success': function(risposta) {
         console.log(risposta);
+        grafico_fatturato_mensile(risposta);
 
-        var fatturato_mensile = {
-            January: 0,
-            February: 0,
-            March: 0,
-            April: 0,
-            May: 0,
-            June: 0,
-            July: 0,
-            August: 0,
-            September: 0,
-            October: 0,
-            November: 0,
-            December: 0,
-        };
+
+        var vendite = {};
+        var somma_totale = 0;
 
         for (var i = 0; i < risposta.length; i++) {
 
@@ -34,32 +24,36 @@ $.ajax({
             var importo = dati_utili.amount;
             console.log(importo);
 
-            var data = dati_utili.date;
-            console.log(data);
+            somma_totale += importo;
 
-            var mese = moment(data, "DD-MM-YYYY");
-            data = mese.format('MMMM');
-            console.log(data);
 
-            fatturato_mensile[mese.format('MMMM')] += importo;
+            var imprenditore = dati_utili.salesman;
+            console.log(imprenditore);
 
             // PROCEDIMENTO SE AVESSI AVUTO L'OGGETTO "FATTURATO MENSILE" VUOTO SENZA CHIAVI E VALORI
-            // if (!fatturato_mensile.hasOwnProperty(data)) {
-            //     fatturato_mensile[mese.format('MMMM')] = importo;
-            // } else {
-            //     fatturato_mensile[mese.format('MMMM')] += importo;
-            // }
-            
-            console.log(fatturato_mensile);
+            if (!vendite.hasOwnProperty(imprenditore)) {
+                vendite[imprenditore] = importo;
+            } else {
+                vendite[imprenditore] += importo;
+            }
         }
+        console.log(vendite);
+        console.log(somma_totale);
 
-        var chiavi = Object.keys(fatturato_mensile);
-        var valori = Object.values(fatturato_mensile);
+        var chiavi = Object.keys(vendite);
 
-        var ctx = $('#myChart')[0].getContext('2d');
+        var valori = Object.values(vendite);
+
+        // for (var a = 0; a < valori.length; a++) {
+        //     var numeri = valori[a];
+        //
+        //
+        // }
+
+        var ctx = $('#myChart-2')[0].getContext('2d');
 
         var myChart = new Chart(ctx, {
-            type: 'line',
+            type: 'pie',
             data: {
                 labels: chiavi,
                 datasets: [{
@@ -85,13 +79,7 @@ $.ajax({
                 }]
             },
             options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
+
             }
         });
 
@@ -102,6 +90,98 @@ $.ajax({
     }
 });
 
-function grafico_fatturato_mensile() {
 
+
+
+
+
+
+
+
+
+
+function grafico_fatturato_mensile(risposta) {
+
+    var fatturato_mensile = {
+        January: 0,
+        February: 0,
+        March: 0,
+        April: 0,
+        May: 0,
+        June: 0,
+        July: 0,
+        August: 0,
+        September: 0,
+        October: 0,
+        November: 0,
+        December: 0,
+    };
+
+    for (var i = 0; i < risposta.length; i++) {
+
+        var dati_utili = risposta[i];
+
+        var importo = dati_utili.amount;
+        console.log(importo);
+
+        var data = dati_utili.date;
+        console.log(data);
+
+        var mese = moment(data, "DD-MM-YYYY");
+        data = mese.format('MMMM');
+        console.log(data);
+
+        fatturato_mensile[mese.format('MMMM')] += importo;
+
+        // PROCEDIMENTO SE AVESSI AVUTO L'OGGETTO "FATTURATO MENSILE" VUOTO SENZA CHIAVI E VALORI
+        // if (!fatturato_mensile.hasOwnProperty(data)) {
+        //     fatturato_mensile[mese.format('MMMM')] = importo;
+        // } else {
+        //     fatturato_mensile[mese.format('MMMM')] += importo;
+        // }
+
+        console.log(fatturato_mensile);
+    }
+
+    var chiavi = Object.keys(fatturato_mensile);
+    var valori = Object.values(fatturato_mensile);
+
+    var ctx = $('#myChart')[0].getContext('2d');
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chiavi,
+            datasets: [{
+                label: '# of Votes',
+                data: valori,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
 }
