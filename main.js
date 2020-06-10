@@ -25,9 +25,10 @@ $.ajax({
             console.log(data);
 
             var mese = moment(data, "DD-MM-YYYY");
-            console.log(mese.format('MMMM'));
+            data = mese.format('MMMM');
+            console.log(data);
 
-            if (!fatturato_mensile.hasOwnProperty(mese)) {
+            if (!fatturato_mensile.hasOwnProperty(data)) {
                 fatturato_mensile[mese.format('MMMM')] = importo;
             } else {
                 fatturato_mensile[mese.format('MMMM')] += importo;
