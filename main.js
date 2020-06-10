@@ -12,9 +12,10 @@ $.ajax({
     'success': function(risposta) {
         console.log(risposta);
 
-        var fatturato_mensile= {};
+        var fatturato_mensile = {};
 
         for (var i = 0; i < risposta.length; i++) {
+
             var dati_utili = risposta[i];
 
             var importo = dati_utili.amount;
@@ -26,14 +27,14 @@ $.ajax({
             var mese = moment(data, "DD-MM-YYYY");
             console.log(mese.format('MMMM'));
 
-            fatturato_mensile[data] = importo;
+            fatturato_mensile[mese.format('MMMM')] = importo;
 
             if (fatturato_mensile.hasOwnProperty(mese)) {
                 fatturato_mensile[data] += importo;
             }
-
+            console.log(fatturato_mensile);
         }
-        console.log(fatturato_mensile);
+
 
     },
     'error': function() {
