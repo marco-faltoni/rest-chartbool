@@ -12,7 +12,20 @@ $.ajax({
     'success': function(risposta) {
         console.log(risposta);
 
-        var fatturato_mensile = {};
+        var fatturato_mensile = {
+            January: 0,
+            February: 0,
+            March: 0,
+            April: 0,
+            May: 0,
+            June: 0,
+            July: 0,
+            August: 0,
+            September: 0,
+            October: 0,
+            November: 0,
+            December: 0,
+        };
 
         for (var i = 0; i < risposta.length; i++) {
 
@@ -28,11 +41,15 @@ $.ajax({
             data = mese.format('MMMM');
             console.log(data);
 
-            if (!fatturato_mensile.hasOwnProperty(data)) {
-                fatturato_mensile[mese.format('MMMM')] = importo;
-            } else {
-                fatturato_mensile[mese.format('MMMM')] += importo;
-            }
+            fatturato_mensile[mese.format('MMMM')] += importo;
+
+            // PROCEDIMENTO SE AVESSI AVUTO L'OGGETTO "FATTURATO MENSILE" VUOTO SENZA CHIAVI E VALORI
+            // if (!fatturato_mensile.hasOwnProperty(data)) {
+            //     fatturato_mensile[mese.format('MMMM')] = importo;
+            // } else {
+            //     fatturato_mensile[mese.format('MMMM')] += importo;
+            // }
+            
             console.log(fatturato_mensile);
         }
 
@@ -84,3 +101,7 @@ $.ajax({
         console.log('errore');
     }
 });
+
+function grafico_fatturato_mensile() {
+
+}
