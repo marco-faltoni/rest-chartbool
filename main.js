@@ -147,9 +147,11 @@ function grafico_vendite(risposta) {
     for (var a = 0; a < valori.length; a++) {
         var numeri = valori[a];
         console.log(numeri);
-        var percent = ((numeri / somma_totale) * 100);
-        console.log(percent);
-        percentuali.push(percent);
+        var numero_reale = ((numeri / somma_totale) * 100);
+        console.log(numero_reale);
+        var percentuale = numero_reale.toFixed(1);
+        console.log(percentuale);
+        percentuali.push(percentuale);
 
     }
     console.log(percentuali);
