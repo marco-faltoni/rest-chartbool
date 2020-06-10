@@ -74,25 +74,45 @@ function grafico_fatturato_mensile(risposta) {
         data: {
             labels: chiavi,
             datasets: [{
-                label: '# of Votes',
+                label: '# amount',
                 data: valori,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(202, 46, 85, 0.4)',
+                    'rgba(54, 162, 235, 0.4)',
+                    'rgba(255, 206, 86, 0.4)',
+                    'rgba(75, 192, 192, 0.4)',
+                    'rgba(153, 102, 255, 0.4)',
+                    'rgba(255, 159, 64, 0.4)',
+                    'rgba(146, 170, 131, 0.4)',
+                    'rgba(14, 14, 82, 0.4)',
+                    'rgba(179, 136, 235, 0.4)',
+                    'rgba(241, 191, 152, 0.4)',
+                    'rgba(84, 94, 117, 0.4)',
+                    'rgba(70, 37, 33, 0.4)',
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
+                    'rgba(202, 46, 85, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
                     'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(146, 170, 131, 1)',
+                    'rgba(14, 14, 82, 1)',
+                    'rgba(179, 136, 235, 1)',
+                    'rgba(241, 191, 152, 1)',
+                    'rgba(84, 94, 117, 1)',
+                    'rgba(70, 37, 33, 1)',
                 ],
-                borderWidth: 1
+                borderWidth: 2,
+
+                lineTension: 0.2,
+
+                hoverBorderWidth: 4,
+
+                fill: false,
+
+                pointRadius: 4
             }]
         },
         options: {
@@ -102,7 +122,15 @@ function grafico_fatturato_mensile(risposta) {
                         beginAtZero: true
                     }
                 }]
+            },
+            title: {
+                display: true,
+                text: 'Fatturato su base mensile'
+            },
+            legend: {
+                position: 'bottom'
             }
+
         }
     });
 }
@@ -161,7 +189,7 @@ function grafico_vendite(risposta) {
     var ctx = $('#myChart-2')[0].getContext('2d');
 
     var myChart = new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: chiavi,
             datasets: [{
@@ -172,21 +200,27 @@ function grafico_vendite(risposta) {
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
                 ],
-                borderWidth: 1
+                borderWidth: 1,
+
+
             }]
         },
         options: {
+
+            title: {
+                display: true,
+                text: 'Vendite per venditore'
+            },
+            legend: {
+                position: 'bottom'
+            }
 
         }
     });
