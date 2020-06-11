@@ -16,8 +16,8 @@ function chiamata_recupero_e_aggiorno_dati(){
         'method': 'GET',
         'success': function(ris) {
             console.log(ris);
-            // grafico_fatturato_mensile(ris);
-            // grafico_vendite(ris);
+            grafico_fatturato_mensile(ris);
+            grafico_vendite(ris);
         },
         'error': function() {
             console.log('errore');
@@ -26,34 +26,41 @@ function chiamata_recupero_e_aggiorno_dati(){
 }
 
 $('button').on('click', function(){
-
+    // recupero il nome scelto nelle opzioni
     var nome_scelto = $('.name').children('option:selected').text();
 
+    // recupero il mese scelto nelle opzioni
     var mese_scelto = $('.months').children('option:selected').text();
+    // associo la stringa ottenuta con la il mese di moment
     var converto_mese = moment(mese_scelto, "MMMM");
-    var data_finale = converto_mese.format("DD-MM-2017");
-
+    // converto il mese di moment ricavato sopra in una data moment completa
+    var data_finale = converto_mese.format("DD/MM/2017");
+    // faccio il parseInt del numero ricavato dall'input
     var cifra_immessa = parseInt($('input').val());
 
     console.log(nome_scelto, data_finale, cifra_immessa);
-    // $('input').val('');
 
-    $.ajax({
-        'url': 'http://157.230.17.132:4009/sales',
-        'method': 'POST',
-        'data': {
-            'salesman': nome_scelto,
-            'amount': cifra_immessa,
-            'date': data_finale
-        },
-        'success': function(invio) {
-            console.log(invio);
-            chiamata_recupero_e_aggiorno_dati();
-        },
-        'error': function() {
-            alert('errore');
-        }
-    });
+    // faccio una condizione per essere sicuro che l'utente selezioni una delle opzioni valide
+    if (nome_scelto == 'Imprenditori' || mese_scelto == 'Mesi') {
+        alert('Seleziona il Mese e/o un Imprenditore');
+    } else {
+        $.ajax({
+            'url': 'http://157.230.17.132:4009/sales',
+            'method': 'POST',
+            'data': {
+                'salesman': nome_scelto,
+                'amount': cifra_immessa,
+                'date': data_finale
+            },
+            'success': function(invio) {
+                console.log(invio);
+                chiamata_recupero_e_aggiorno_dati();
+            },
+            'error': function() {
+                alert('errore');
+            }
+        });
+    }
 });
 
 // moment.locale('it');
@@ -92,7 +99,7 @@ function grafico_fatturato_mensile(risposta) {
         console.log(data);
 
         // incremento ad ogni giro l'importo al mese corrente
-        fatturato_mensile[mese.format('MMMM')] += importo;
+        fatturato_mensile[mese.format('MMMM')] += parseInt(importo);
 
         // PROCEDIMENTO SE AVESSI AVUTO L'OGGETTO "FATTURATO MENSILE" VUOTO SENZA CHIAVI E VALORI
         // if (!fatturato_mensile.hasOwnProperty(data)) {
@@ -189,16 +196,16 @@ function grafico_vendite(risposta) {
         var importo = dati_utili.amount;
         console.log(importo);
 
-        somma_totale += importo;
+        somma_totale += parseInt(importo);
 
 
         var imprenditore = dati_utili.salesman;
         console.log(imprenditore);
 
         if (!vendite.hasOwnProperty(imprenditore)) {
-            vendite[imprenditore] = importo;
+            vendite[imprenditore] = parseInt(importo);
         } else {
-            vendite[imprenditore] += importo;
+            vendite[imprenditore] += parseInt(importo);
         }
     }
 
