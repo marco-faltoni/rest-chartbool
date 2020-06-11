@@ -16,8 +16,8 @@ function chiamata_recupero_e_aggiorno_dati(){
         'method': 'GET',
         'success': function(ris) {
             console.log(ris);
-            grafico_fatturato_mensile(ris);
-            grafico_vendite(ris);
+            // grafico_fatturato_mensile(ris);
+            // grafico_vendite(ris);
         },
         'error': function() {
             console.log('errore');
@@ -27,30 +27,33 @@ function chiamata_recupero_e_aggiorno_dati(){
 
 $('button').on('click', function(){
 
-
     var nome_scelto = $('.name').children('option:selected').text();
+
     var mese_scelto = $('.months').children('option:selected').text();
+    var converto_mese = moment(mese_scelto, "MMMM");
+    var data_finale = converto_mese.format("DD-MM-2017");
+
     var cifra_immessa = parseInt($('input').val());
 
-    console.log(nome_scelto, mese_scelto, cifra_immessa);
-    $('input').val('');
+    console.log(nome_scelto, data_finale, cifra_immessa);
+    // $('input').val('');
 
-    // $.ajax({
-    //     'url': 'http://157.230.17.132:4009/sales',
-    //     'method': 'POST',
-    //     'data': {
-    //         'salesman': nome_scelto,
-    //         'amount': cifra_immessa,
-    //         'date': mese_scelto
-    //     },
-    //     'success': function(invio) {
-    //         console.log(invio);
-    //         chiamata_recupero_e_aggiorno_dati();
-    //     },
-    //     'error': function() {
-    //         alert('errore');
-    //     }
-    // });
+    $.ajax({
+        'url': 'http://157.230.17.132:4009/sales',
+        'method': 'POST',
+        'data': {
+            'salesman': nome_scelto,
+            'amount': cifra_immessa,
+            'date': data_finale
+        },
+        'success': function(invio) {
+            console.log(invio);
+            chiamata_recupero_e_aggiorno_dati();
+        },
+        'error': function() {
+            alert('errore');
+        }
+    });
 });
 
 // moment.locale('it');
