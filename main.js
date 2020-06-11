@@ -5,20 +5,55 @@
 // 1.Andamento   delle   vendite   totali   della   nostra   azienda   con   un   grafico   di   tipo   Line (http:www.chartjs.org/docs/latest/charts/line.html) con un   unico   dataset   che conterrà   il   numero   di   vendite   totali   mese   per   mese   nel   2017.
 
 // 2.Il   secondo   grafico   è   quello   a   torta (http:www.chartjs.org/docs/latest/charts/doughnut.html)   che   evidenzierà   il contributo   di   ogni   venditore   per   l’anno   2017.   Il   valore   dovrà   essere   la percentuale   di   vendite   effettuate   da   quel   venditore   (fatturato_del   venditore   / fatturato_totale)
+$(document).ready(function() {
 
-$.ajax({
-    'url': 'http://157.230.17.132:4009/sales',
-    'method': 'GET',
-    'success': function(ris) {
-        console.log(ris);
-        grafico_fatturato_mensile(ris);
-        grafico_vendite(ris);
-    },
-    'error': function() {
-        console.log('errore');
-    }
+
+chiamata_recupero_e_aggiorno_dati();
+
+function chiamata_recupero_e_aggiorno_dati(){
+    $.ajax({
+        'url': 'http://157.230.17.132:4009/sales',
+        'method': 'GET',
+        'success': function(ris) {
+            console.log(ris);
+            grafico_fatturato_mensile(ris);
+            grafico_vendite(ris);
+        },
+        'error': function() {
+            console.log('errore');
+        }
+    });
+}
+
+$('button').on('click', function(){
+
+
+    var nome_scelto = $('.name').children('option:selected').text();
+    var mese_scelto = $('.months').children('option:selected').text();
+    var cifra_immessa = parseInt($('input').val());
+
+    console.log(nome_scelto, mese_scelto, cifra_immessa);
+    $('input').val('');
+
+    // $.ajax({
+    //     'url': 'http://157.230.17.132:4009/sales',
+    //     'method': 'POST',
+    //     'data': {
+    //         'salesman': nome_scelto,
+    //         'amount': cifra_immessa,
+    //         'date': mese_scelto
+    //     },
+    //     'success': function(invio) {
+    //         console.log(invio);
+    //         chiamata_recupero_e_aggiorno_dati();
+    //     },
+    //     'error': function() {
+    //         alert('errore');
+    //     }
+    // });
 });
 
+// moment.locale('it');
 
 // FUNZIONE PER GENERARE GRAFICO DI VENDITE PER MESE
 function grafico_fatturato_mensile(risposta) {
@@ -39,19 +74,21 @@ function grafico_fatturato_mensile(risposta) {
     };
 
     for (var i = 0; i < risposta.length; i++) {
-
+        // recupero l'elemento corrente, che corrisponde ad un oggetto
         var dati_utili = risposta[i];
 
+        // recupero i vari fatturati, espressi in numeri
         var importo = dati_utili.amount;
         console.log(importo);
-
+        // recupero la data per ogni singolo fatturato
         var data = dati_utili.date;
         console.log(data);
-
+        // con moment associo la data recuperata prima con il formato giusto, e la sostituisco con il mese scritto in lettere corrispondente
         var mese = moment(data, "DD-MM-YYYY");
         data = mese.format('MMMM');
         console.log(data);
 
+        // incremento ad ogni giro l'importo al mese corrente
         fatturato_mensile[mese.format('MMMM')] += importo;
 
         // PROCEDIMENTO SE AVESSI AVUTO L'OGGETTO "FATTURATO MENSILE" VUOTO SENZA CHIAVI E VALORI
@@ -74,7 +111,7 @@ function grafico_fatturato_mensile(risposta) {
         data: {
             labels: chiavi,
             datasets: [{
-                label: '# amount',
+                label: 'vendite',
                 data: valori,
                 backgroundColor: [
                     'rgba(202, 46, 85, 0.4)',
@@ -175,15 +212,17 @@ function grafico_vendite(risposta) {
     for (var a = 0; a < valori.length; a++) {
         var numeri = valori[a];
         console.log(numeri);
+
         var numero_reale = ((numeri / somma_totale) * 100);
         console.log(numero_reale);
+
         var percentuale = numero_reale.toFixed(1);
         console.log(percentuale);
+
         percentuali.push(percentuale);
 
     }
     console.log(percentuali);
-
 
 
     var ctx = $('#myChart-2')[0].getContext('2d');
@@ -216,7 +255,7 @@ function grafico_vendite(risposta) {
 
             title: {
                 display: true,
-                text: 'Vendite per venditore'
+                text: 'Vendite per imprenditore'
             },
             legend: {
                 position: 'bottom'
@@ -225,3 +264,5 @@ function grafico_vendite(risposta) {
         }
     });
 }
+
+});
