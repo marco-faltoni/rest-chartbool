@@ -31,18 +31,22 @@ $('button').on('click', function(){
 
     // recupero il mese scelto nelle opzioni
     var mese_scelto = $('.months').children('option:selected').text();
+
     // associo la stringa ottenuta con la il mese di moment
     var converto_mese = moment(mese_scelto, "MMMM");
     // converto il mese di moment ricavato sopra in una data moment completa
     var data_finale = converto_mese.format("DD/MM/2017");
+
     // faccio il parseInt del numero ricavato dall'input
     var cifra_immessa = parseInt($('input').val());
 
     console.log(nome_scelto, data_finale, cifra_immessa);
 
-    // faccio una condizione per essere sicuro che l'utente selezioni una delle opzioni valide
+    // faccio una condizione per essere sicuro che l'utente selezioni una delle opzioni valide e che immetta un numero
     if (nome_scelto == 'Imprenditori' || mese_scelto == 'Mesi') {
         alert('Seleziona il Mese e/o un Imprenditore');
+    } else if (cifra_immessa != isNaN || cifra_immessa > 0) {
+        alert('Immetti un numero superiore a 0');
     } else {
         $.ajax({
             'url': 'http://157.230.17.132:4009/sales',
